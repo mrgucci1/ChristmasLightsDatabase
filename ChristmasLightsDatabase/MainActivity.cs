@@ -43,8 +43,11 @@ namespace ChristmasLightsDatabase
 
         private void MyListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
-            //placeholder
-            throw new System.NotImplementedException();
+            //pull up dialog fragment to display more address info
+            FragmentTransaction transaction = FragmentManager.BeginTransaction();
+            dialog_AddressInfo addressInfo_Dialog = new dialog_AddressInfo(address, e.Position);
+            addressInfo_Dialog.Show(transaction, "dialog fragment");
+
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

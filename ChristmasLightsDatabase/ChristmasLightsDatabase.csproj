@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="addressHolder.cs" />
+    <Compile Include="dialog_AddressInfo.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="myListViewAdapter.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -108,6 +109,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\listview_row.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\dialog_AddressInfo.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:text="Address Line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:id="@+id/addressLineHeader" />
+    <TextView
+        android:text="addressLineValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addressLineValue" />
+    <TextView
+        android:text="City"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cityHeader" />
+    <TextView
+        android:text="cityValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cityValue" />
+    <TextView
+        android:text="State"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stateHeader" />
+    <TextView
+        android:text="stateValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stateValue" />
+    <TextView
+        android:text="ZipCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/zipHeader" />
+    <TextView
+        android:text="zipValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/zipValue" />
+    <TextView
+        android:text="Description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/descHeader" />
+    
+
+</LinearLayout>
