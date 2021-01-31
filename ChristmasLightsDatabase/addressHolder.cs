@@ -14,6 +14,7 @@ namespace ChristmasLightsDatabase
 {
     class addressHolder
     {
+        //Address atributes
         public string addressLine { get; set; }
         public string city { get; set; }
         public string state { get; set; }

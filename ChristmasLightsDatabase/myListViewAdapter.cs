@@ -37,6 +37,7 @@ namespace ChristmasLightsDatabase
             {
                 row = LayoutInflater.From(mContext).Inflate(Resource.Layout.listview_row, null, false);
             }
+            //Set address items to list contents
             TextView txtAddress = row.FindViewById<TextView>(Resource.Id.txtAddressLine);
             txtAddress.Text = mItems[position].addressLine;
             TextView txtCity = row.FindViewById<TextView>(Resource.Id.txtCity);
@@ -45,7 +46,6 @@ namespace ChristmasLightsDatabase
             txtState.Text = mItems[position].state;
             TextView txtZipCode = row.FindViewById<TextView>(Resource.Id.txtZipCode);
             txtZipCode.Text = mItems[position].zipCode;
-
             return row;
         }
 
