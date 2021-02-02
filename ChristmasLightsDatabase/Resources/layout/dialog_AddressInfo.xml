@@ -1,5 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,47 +11,93 @@
         android:layout_height="wrap_content"
         android:minWidth="25px"
         android:minHeight="25px"
-        android:id="@+id/addressLineHeader" />
+        android:id="@+id/addressLineHeader"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="24dp"
+        android:textColor="#ff000000" />
     <TextView
         android:text="addressLineValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/addressLineValue" />
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:id="@+id/addressLineValue"
+        android:textSize="13dp"
+        android:textColor="#ff000000"/>
     <TextView
         android:text="City"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cityHeader" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:id="@+id/cityHeader"
+        android:textSize="24dp"
+        android:textColor="#ff000000"/>
     <TextView
         android:text="cityValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cityValue" />
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:id="@+id/cityValue"
+        android:textSize="13dp"
+        android:textColor="#ff000000"/>
     <TextView
         android:text="State"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/stateHeader" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:id="@+id/stateHeader"
+        android:textSize="24dp"
+        android:textColor="#ff000000"/>
     <TextView
         android:text="stateValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/stateValue" />
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:id="@+id/stateValue"
+        android:textSize="13dp"
+        android:textColor="#ff000000"/>
     <TextView
         android:text="ZipCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/zipHeader" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:id="@+id/zipHeader"
+        android:textSize="24dp"
+        android:textColor="#ff000000"/>
     <TextView
         android:text="zipValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/zipValue" />
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:id="@+id/zipValue"
+        android:textSize="13dp"
+        android:textColor="#ff000000"/>
     <TextView
         android:text="Description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/descHeader" />
-    
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:id="@+id/descHeader"
+        android:textSize="24dp"
+        android:textColor="#ff000000"/>
+
 
 </LinearLayout>
