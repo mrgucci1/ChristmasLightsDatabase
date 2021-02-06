@@ -14,6 +14,7 @@ namespace ChristmasLightsDatabase
         int number;
         private List<addressHolder> address;
         private ListView myListView;
+        private Button addNewAddress;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -27,12 +28,21 @@ namespace ChristmasLightsDatabase
             address.Add(new addressHolder() { addressLine = "2 Canal Road Lake", city = "Zurich", state = "IL", zipCode = "60047" });
             //initilize list view
             myListView = FindViewById<ListView>(Resource.Id.myListView);
+            addNewAddress = FindViewById<Button>(Resource.Id.addNewAddress);
             //apply custom adapter to listview so we can display our address's
             myListViewAdapter adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
             //click listeners
             myListView.ItemClick += MyListView_ItemClick;
             myListView.LongClick += MyListView_LongClick;
+            addNewAddress.Click += AddNewAddress_Click;
+        }
+
+        private void AddNewAddress_Click(object sender, System.EventArgs e)
+        {
+            FragmentTransaction transaction = FragmentManager.BeginTransaction();
+            dialog_AddNewAddress addNewAddress_dialog = new dialog_AddNewAddress();
+            addNewAddress_dialog.Show(transaction, "dialog fragment");
         }
 
         private void MyListView_LongClick(object sender, Android.Views.View.LongClickEventArgs e)
