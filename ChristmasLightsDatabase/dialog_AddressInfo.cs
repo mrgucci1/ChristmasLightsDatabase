@@ -17,13 +17,16 @@ namespace ChristmasLightsDatabase
         private TextView CityValue;
         private TextView StateValue;
         private TextView ZipCodeValue;
-        string addressLine, city, state, zipCode;
+        private TextView DescValue;
+        string addressLine, city, state, zipCode, desc;
         public dialog_AddressInfo(List<addressHolder> mItems, int position)
         {
             addressLine = mItems[position].addressLine;
             city = mItems[position].city;
             state = mItems[position].state;
             zipCode = mItems[position].zipCode;
+            desc = mItems[position].desc;
+
         }
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -37,6 +40,8 @@ namespace ChristmasLightsDatabase
             StateValue.Text = state;
             ZipCodeValue = view.FindViewById<TextView>(Resource.Id.zipValue);
             ZipCodeValue.Text = zipCode;
+            DescValue = view.FindViewById<TextView>(Resource.Id.descValue);
+            DescValue.Text = desc;
             return view;
         }
     }

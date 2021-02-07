@@ -19,5 +19,6 @@ namespace ChristmasLightsDatabase
         public string city { get; set; }
         public string state { get; set; }
         public string zipCode { get; set; }
+        public string desc { get; set; }
     }
 }
