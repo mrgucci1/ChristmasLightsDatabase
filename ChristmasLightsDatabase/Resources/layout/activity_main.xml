@@ -1,21 +1,35 @@
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <Button
-        android:text="Add New Address"
+    android:layout_height="match_parent"
+    android:id="@+id/swipeLayout">
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/addNewAddress"
-        android:maxHeight="20dp" />
-    <ListView
-        android:paddingTop="50dp"
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/myListView" />
+        android:maxHeight="100dp">
+        <ListView
+            android:paddingTop="50dp"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/myListView"
+            android:maxHeight="300dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <Button
+                    android:text="Add New Address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addNewAddress"
+                    android:maxHeight="20dp" />
+                </LinearLayout>
+    </FrameLayout>
+    
+    
 
-</RelativeLayout>
+    
+</android.support.v4.widget.SwipeRefreshLayout>

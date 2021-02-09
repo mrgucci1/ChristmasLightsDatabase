@@ -4,6 +4,9 @@ using Android.Support.V7.App;
 using Android.Runtime;
 using Android.Widget;
 using System.Collections.Generic;
+using Android.Support.V4.Widget;
+using System.ComponentModel;
+using System.Threading;
 
 namespace ChristmasLightsDatabase
 {
@@ -15,12 +18,18 @@ namespace ChristmasLightsDatabase
         private List<addressHolder> address;
         private ListView myListView;
         private Button addNewAddress;
+        SwipeRefreshLayout classSwipeRefresh;
+
+        [System.Obsolete]
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
+            //Reference swiperefresh layout, set color scheme
+            classSwipeRefresh = FindViewById<SwipeRefreshLayout>(Resource.Id.swipeLayout);
+            classSwipeRefresh.SetColorScheme(Android.Resource.Color.HoloBlueBright, Android.Resource.Color.HoloOrangeLight, Android.Resource.Color.HoloRedLight, Android.Resource.Color.HoloGreenLight);
             //initialize address list
             address = new List<addressHolder>();
             //add address objects
@@ -35,8 +44,30 @@ namespace ChristmasLightsDatabase
             //click listeners
             myListView.ItemClick += MyListView_ItemClick;
             addNewAddress.Click += AddNewAddress_Click;
+            classSwipeRefresh.Refresh += ClassSwipeRefresh_Refresh;
             
         }
+
+        private void ClassSwipeRefresh_Refresh(object sender, System.EventArgs e)
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += Worker_DoWork; //run on new thread
+            worker.RunWorkerCompleted += Worker_RunWorkerCompleted; //work is completed
+            worker.RunWorkerAsync(); //start work!
+        }
+
+        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            //do work once finished
+            RunOnUiThread(() => { classSwipeRefresh.Refreshing = false; });
+        }
+
+        private void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            //Add SQL Code to refresh here, for now we are sleeping
+            Thread.Sleep(3000);
+        }
+
         private void ButtonAddNew_Click(object sender, System.EventArgs e)
         {
             EditText editAddressLine = FindViewById<EditText>(Resource.Id.editAddressLine);
