@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Android.Support.V4.Widget;
 using System.ComponentModel;
 using System.Threading;
+using Android.Views;
 
 namespace ChristmasLightsDatabase
 {
@@ -19,6 +20,9 @@ namespace ChristmasLightsDatabase
         private ListView myListView;
         private Button addNewAddress;
         SwipeRefreshLayout classSwipeRefresh;
+        private EditText editSearch;
+        private bool animateBool = true;
+        private FrameLayout frameLayout;
 
         [System.Obsolete]
         protected override void OnCreate(Bundle savedInstanceState)
@@ -38,6 +42,10 @@ namespace ChristmasLightsDatabase
             //initilize list view
             myListView = FindViewById<ListView>(Resource.Id.myListView);
             addNewAddress = FindViewById<Button>(Resource.Id.addNewAddress);
+            //Reference to edit text and frame layout
+            editSearch = FindViewById<EditText>(Resource.Id.editSearch);
+            frameLayout = FindViewById<FrameLayout>(Resource.Id.frameLayout);
+            editSearch.Alpha = 0; //make edit text invisible
             //apply custom adapter to listview so we can display our address's
             myListViewAdapter adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
@@ -46,6 +54,52 @@ namespace ChristmasLightsDatabase
             addNewAddress.Click += AddNewAddress_Click;
             classSwipeRefresh.Refresh += ClassSwipeRefresh_Refresh;
             
+        }
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            //Show actionbar menu
+            MenuInflater.Inflate(Resource.Menu.actionbar, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+        //animate search bar
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.action_search:
+                    //search icon has been clicked
+                    if(animateBool)
+                    {
+                        //list view is up
+                        animation anim = new animation(myListView, myListView.Height - editSearch.Height);
+                        anim.Duration = 500;
+                        myListView.StartAnimation(anim);
+                        anim.AnimationStart += Anim_AnimationStartDown; //listener for when animation has started
+                        frameLayout.Animate().TranslationYBy(editSearch.Height).SetDuration(500).Start();
+                    }
+                    else
+                    {
+                        animation anim = new animation(myListView, myListView.Height + editSearch.Height);
+                        anim.Duration = 500;
+                        myListView.StartAnimation(anim);
+                        anim.AnimationStart += Anim_AnimationStartUp; //listener for when animation has started
+                        frameLayout.Animate().TranslationYBy(-editSearch.Height).SetDuration(500).Start();
+                    }
+                    animateBool = !animateBool;
+                    return true;
+                default:
+                    return base.OnOptionsItemSelected(item);
+            }
+            
+        }
+
+        private void Anim_AnimationStartDown(object sender, Android.Views.Animations.Animation.AnimationStartEventArgs e)
+        {
+            editSearch.Animate().AlphaBy(1.0f).SetDuration(500).Start();
+        }
+        private void Anim_AnimationStartUp(object sender, Android.Views.Animations.Animation.AnimationStartEventArgs e)
+        {
+            editSearch.Animate().AlphaBy(-1.0f).SetDuration(300).Start();
         }
 
         private void ClassSwipeRefresh_Refresh(object sender, System.EventArgs e)
@@ -67,18 +121,6 @@ namespace ChristmasLightsDatabase
             //Add SQL Code to refresh here, for now we are sleeping
             Thread.Sleep(3000);
         }
-
-        private void ButtonAddNew_Click(object sender, System.EventArgs e)
-        {
-            EditText editAddressLine = FindViewById<EditText>(Resource.Id.editAddressLine);
-            EditText editCity = FindViewById<EditText>(Resource.Id.editCity);
-            EditText editState = FindViewById<EditText>(Resource.Id.editState);
-            EditText editZipCode = FindViewById<EditText>(Resource.Id.editZipCode);
-            EditText editDesc = FindViewById<EditText>(Resource.Id.editDesc);
-            //Add new address to list
-            address.Add(new addressHolder() { addressLine = editAddressLine.Text, city = editCity.Text, state = editState.Text, zipCode = editZipCode.Text, desc = editDesc.Text });
-        }
-
         private void AddNewAddress_Click(object sender, System.EventArgs e)
         {
             FragmentTransaction transaction = FragmentManager.BeginTransaction();
