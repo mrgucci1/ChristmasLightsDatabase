@@ -8,6 +8,7 @@ using Android.Support.V4.Widget;
 using System.ComponentModel;
 using System.Threading;
 using Android.Views;
+using Android.Views.InputMethods;
 
 namespace ChristmasLightsDatabase
 {
@@ -22,6 +23,7 @@ namespace ChristmasLightsDatabase
         SwipeRefreshLayout classSwipeRefresh;
         private EditText editSearch;
         private bool animateBool = true;
+        private bool isAnimating = false;
         private FrameLayout frameLayout;
 
         [System.Obsolete]
@@ -68,39 +70,63 @@ namespace ChristmasLightsDatabase
             {
                 case Resource.Id.action_search:
                     //search icon has been clicked
-                    if(animateBool)
-                    {
-                        //list view is up
-                        animation anim = new animation(myListView, myListView.Height - editSearch.Height);
-                        anim.Duration = 500;
-                        myListView.StartAnimation(anim);
-                        anim.AnimationStart += Anim_AnimationStartDown; //listener for when animation has started
-                        frameLayout.Animate().TranslationYBy(editSearch.Height).SetDuration(500).Start();
-                    }
+                    if (isAnimating)
+                        return true;
                     else
                     {
-                        animation anim = new animation(myListView, myListView.Height + editSearch.Height);
-                        anim.Duration = 500;
-                        myListView.StartAnimation(anim);
-                        anim.AnimationStart += Anim_AnimationStartUp; //listener for when animation has started
-                        frameLayout.Animate().TranslationYBy(-editSearch.Height).SetDuration(500).Start();
+                        if (animateBool)
+                        {
+                            classSwipeRefresh.Animate().TranslationYBy(editSearch.Height).SetDuration(500).Start();
+                            //Using this class caused my list view to get cut in half when animating?? avoiding it for now
+                            //list view is up
+                            /*
+                            animation anim = new animation(myListView, myListView.Height - editSearch.Height);
+                            anim.Duration = 500;
+                            anim.AnimationStart += Anim_AnimationStartDown; //listener for when animation has started
+                            anim.AnimationEnd += Anim_AnimationEndDown;
+                            myListView.StartAnimation(anim);*/
+                            editSearch.Animate().AlphaBy(1.0f).SetDuration(500).Start();
+                        }
+                        else
+                        {
+                            classSwipeRefresh.Animate().TranslationYBy(-editSearch.Height).SetDuration(500).Start();
+                            //Using this class caused my list view to get cut in half when animating?? avoiding it for now
+                            /*animation anim = new animation(myListView, myListView.Height + editSearch.Height);
+                            anim.Duration = 500;
+                            anim.AnimationStart += Anim_AnimationStartUp; //listener for when animation has started
+                            anim.AnimationEnd += Anim_AnimationEndUp;
+                            myListView.StartAnimation(anim);*/
+                            editSearch.Animate().AlphaBy(-1.0f).SetDuration(300).Start();
+                        }
+                        animateBool = !animateBool;
+                        return true;
                     }
-                    animateBool = !animateBool;
-                    return true;
                 default:
                     return base.OnOptionsItemSelected(item);
             }
             
         }
+        //Old events, will delete if I can figure out why it breaks my list view later
+        /*private void Anim_AnimationEndDown(object sender, Android.Views.Animations.Animation.AnimationEndEventArgs e)
+        {
+            isAnimating = false;
+        }
+        private void Anim_AnimationEndUp(object sender, Android.Views.Animations.Animation.AnimationEndEventArgs e)
+        {
+            isAnimating = false;
+        }
 
         private void Anim_AnimationStartDown(object sender, Android.Views.Animations.Animation.AnimationStartEventArgs e)
         {
+            isAnimating = true;
             editSearch.Animate().AlphaBy(1.0f).SetDuration(500).Start();
+            
         }
         private void Anim_AnimationStartUp(object sender, Android.Views.Animations.Animation.AnimationStartEventArgs e)
         {
+            isAnimating = true;
             editSearch.Animate().AlphaBy(-1.0f).SetDuration(300).Start();
-        }
+        }*/
 
         private void ClassSwipeRefresh_Refresh(object sender, System.EventArgs e)
         {
