@@ -64,6 +64,7 @@
     <Compile Include="animation.cs" />
     <Compile Include="dialog_AddNewAddress.cs" />
     <Compile Include="dialog_AddressInfo.cs" />
+    <Compile Include="extensionMethods.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="myListViewAdapter.cs" />
     <Compile Include="Resources\Resource.designer.cs" />

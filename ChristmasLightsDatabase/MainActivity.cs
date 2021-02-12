@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Threading;
 using Android.Views;
 using Android.Views.InputMethods;
+using System.Linq;
 
 namespace ChristmasLightsDatabase
 {
@@ -25,7 +26,7 @@ namespace ChristmasLightsDatabase
         private bool animateBool = true;
         private bool isAnimating = false;
         private FrameLayout frameLayout;
-
+        private myListViewAdapter adapter;
         [System.Obsolete]
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -49,14 +50,27 @@ namespace ChristmasLightsDatabase
             frameLayout = FindViewById<FrameLayout>(Resource.Id.frameLayout);
             editSearch.Alpha = 0; //make edit text invisible
             //apply custom adapter to listview so we can display our address's
-            myListViewAdapter adapter = new myListViewAdapter(this, address);
+            adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
             //click listeners
             myListView.ItemClick += MyListView_ItemClick;
             addNewAddress.Click += AddNewAddress_Click;
             classSwipeRefresh.Refresh += ClassSwipeRefresh_Refresh;
+            //text changed event
+            editSearch.TextChanged += EditSearch_TextChanged;
             
         }
+
+        private void EditSearch_TextChanged(object sender, Android.Text.TextChangedEventArgs e)
+        {
+            List<addressHolder> searchedAddressHolder = (from address in address
+                                                         where address.addressLine.Contains(editSearch.Text, System.StringComparison.OrdinalIgnoreCase) || address.city.Contains(editSearch.Text, System.StringComparison.OrdinalIgnoreCase)
+                                                         || address.state.Contains(editSearch.Text, System.StringComparison.OrdinalIgnoreCase) || address.zipCode.Contains(editSearch.Text, System.StringComparison.OrdinalIgnoreCase)
+                                                         select address).ToList<addressHolder>();
+            adapter = new myListViewAdapter(this, searchedAddressHolder);
+            myListView.Adapter = adapter;
+        }
+
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             //Show actionbar menu
@@ -160,7 +174,7 @@ namespace ChristmasLightsDatabase
         {
             //Event that is fired when they click the add new address button on the dialog fragment, add the new address to the list
             address.Add(new addressHolder() { addressLine = e.AddressLine, city = e.City, state = e.State, zipCode = e.State, desc = e.Desc });
-            myListViewAdapter adapter = new myListViewAdapter(this, address);
+            adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
         }
         private void MyListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
