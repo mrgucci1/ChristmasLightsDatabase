@@ -20,12 +20,10 @@ namespace ChristmasLightsDatabase
         int number;
         private List<addressHolder> address;
         private ListView myListView;
-        private Button addNewAddress;
         SwipeRefreshLayout classSwipeRefresh;
         private EditText editSearch;
         private bool animateBool = true;
         private bool isAnimating = false;
-        private FrameLayout frameLayout;
         private myListViewAdapter adapter;
         [System.Obsolete]
         protected override void OnCreate(Bundle savedInstanceState)
@@ -44,17 +42,14 @@ namespace ChristmasLightsDatabase
             address.Add(new addressHolder() { addressLine = "2 Canal Road Lake", city = "Zurich", state = "IL", zipCode = "60047", desc = "From the outside this house looks grandiose. It has been built with grey stones and has blue stone decorations. Large, octagon windows allow enough light to enter the home and have been added to the house in a very symmetric way." });
             //initilize list view
             myListView = FindViewById<ListView>(Resource.Id.myListView);
-            addNewAddress = FindViewById<Button>(Resource.Id.addNewAddress);
             //Reference to edit text and frame layout
             editSearch = FindViewById<EditText>(Resource.Id.editSearch);
-            frameLayout = FindViewById<FrameLayout>(Resource.Id.frameLayout);
             editSearch.Alpha = 0; //make edit text invisible
             //apply custom adapter to listview so we can display our address's
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
             //click listeners
             myListView.ItemClick += MyListView_ItemClick;
-            addNewAddress.Click += AddNewAddress_Click;
             classSwipeRefresh.Refresh += ClassSwipeRefresh_Refresh;
             //text changed event
             editSearch.TextChanged += EditSearch_TextChanged;
@@ -115,6 +110,13 @@ namespace ChristmasLightsDatabase
                         animateBool = !animateBool;
                         return true;
                     }
+                case Resource.Id.action_addnew:
+                    FragmentTransaction transaction = FragmentManager.BeginTransaction();
+                    dialog_AddNewAddress addNewAddress_dialog = new dialog_AddNewAddress();
+                    addNewAddress_dialog.Show(transaction, "dialog fragment");
+                    //Subscribe to on add new address event
+                    addNewAddress_dialog.OnAddNewAddressComplete += AddNewAddress_dialog_OnAddNewAddressComplete;
+                    return true;
                 default:
                     return base.OnOptionsItemSelected(item);
             }
@@ -160,15 +162,6 @@ namespace ChristmasLightsDatabase
         {
             //Add SQL Code to refresh here, for now we are sleeping
             Thread.Sleep(3000);
-        }
-        private void AddNewAddress_Click(object sender, System.EventArgs e)
-        {
-            FragmentTransaction transaction = FragmentManager.BeginTransaction();
-            dialog_AddNewAddress addNewAddress_dialog = new dialog_AddNewAddress();
-            addNewAddress_dialog.Show(transaction, "dialog fragment");
-
-            //Subscribe to on add new address event
-            addNewAddress_dialog.OnAddNewAddressComplete += AddNewAddress_dialog_OnAddNewAddressComplete;
         }
         private void AddNewAddress_dialog_OnAddNewAddressComplete(object sender, OnAddNewAddress e)
         {
