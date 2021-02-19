@@ -21,9 +21,11 @@ namespace ChristmasLightsDatabase
         private List<addressHolder> address;
         private ListView myListView;
         SwipeRefreshLayout classSwipeRefresh;
+        LinearLayout headerLinearLayout;
         private EditText editSearch;
         private bool animateBool = true;
         private bool isAnimating = false;
+        const int editSearchHeight = 113;
         private myListViewAdapter adapter;
         [System.Obsolete]
         protected override void OnCreate(Bundle savedInstanceState)
@@ -35,16 +37,19 @@ namespace ChristmasLightsDatabase
             //Reference swiperefresh layout, set color scheme
             classSwipeRefresh = FindViewById<SwipeRefreshLayout>(Resource.Id.swipeLayout);
             classSwipeRefresh.SetColorScheme(Android.Resource.Color.HoloBlueBright, Android.Resource.Color.HoloOrangeLight, Android.Resource.Color.HoloRedLight, Android.Resource.Color.HoloGreenLight);
+            //Reference Linear Layout holding headers
+
             //initialize address list
             address = new List<addressHolder>();
             //add address objects
-            address.Add( new addressHolder() { addressLine = "290 Vale Street", city = "Portland", state = "ME", zipCode = "04103", desc = "From the outside this house looks stylish. It has been built with brown stones and has red brick decorations. Short, wide windows add to the overall style of the house and have been added to the house in a mostly asymmetric way." });
+            address.Add(new addressHolder() { addressLine = "290 Vale Street", city = "Portland", state = "ME", zipCode = "04103", desc = "From the outside this house looks stylish. It has been built with brown stones and has red brick decorations. Short, wide windows add to the overall style of the house and have been added to the house in a mostly asymmetric way." });
             address.Add(new addressHolder() { addressLine = "2 Canal Road Lake", city = "Zurich", state = "IL", zipCode = "60047", desc = "From the outside this house looks grandiose. It has been built with grey stones and has blue stone decorations. Large, octagon windows allow enough light to enter the home and have been added to the house in a very symmetric way." });
             //initilize list view
             myListView = FindViewById<ListView>(Resource.Id.myListView);
             //Reference to edit text and frame layout
             editSearch = FindViewById<EditText>(Resource.Id.editSearch);
             editSearch.Alpha = 0; //make edit text invisible
+            editSearch.Visibility = ViewStates.Gone;
             //apply custom adapter to listview so we can display our address's
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
@@ -53,7 +58,7 @@ namespace ChristmasLightsDatabase
             classSwipeRefresh.Refresh += ClassSwipeRefresh_Refresh;
             //text changed event
             editSearch.TextChanged += EditSearch_TextChanged;
-            
+
         }
 
         private void EditSearch_TextChanged(object sender, Android.Text.TextChangedEventArgs e)
@@ -85,7 +90,8 @@ namespace ChristmasLightsDatabase
                     {
                         if (animateBool)
                         {
-                            classSwipeRefresh.Animate().TranslationYBy(editSearch.Height).SetDuration(500).Start();
+                            editSearch.Visibility = ViewStates.Visible;
+                            classSwipeRefresh.Animate().TranslationYBy(editSearchHeight).SetDuration(500).Start();
                             //Using this class caused my list view to get cut in half when animating?? avoiding it for now
                             //list view is up
                             /*
@@ -98,7 +104,7 @@ namespace ChristmasLightsDatabase
                         }
                         else
                         {
-                            classSwipeRefresh.Animate().TranslationYBy(-editSearch.Height).SetDuration(500).Start();
+                            classSwipeRefresh.Animate().TranslationYBy(-editSearchHeight).SetDuration(500).Start();
                             //Using this class caused my list view to get cut in half when animating?? avoiding it for now
                             /*animation anim = new animation(myListView, myListView.Height + editSearch.Height);
                             anim.Duration = 500;
@@ -106,6 +112,7 @@ namespace ChristmasLightsDatabase
                             anim.AnimationEnd += Anim_AnimationEndUp;
                             myListView.StartAnimation(anim);*/
                             editSearch.Animate().AlphaBy(-1.0f).SetDuration(300).Start();
+                            editSearch.Visibility = ViewStates.Gone;
                         }
                         animateBool = !animateBool;
                         return true;

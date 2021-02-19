@@ -5,7 +5,7 @@
   <item android:id="@+id/action_search"
         app:showAsAction="always"
         android:text="Search"
-        android:icon="@drawable/baseline_search_black_18dp"/>
+        android:icon="@android:drawable/ic_menu_search"/>
   <item android:id="@+id/action_addnew"
         app:showAsAction="always"
         android:text="Search"

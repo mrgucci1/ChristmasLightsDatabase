@@ -1,58 +1,72 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
         android:id="@+id/frameLayoutParent"
         android:background="@android:color/holo_green_dark">
     <android.support.v4.widget.SwipeRefreshLayout 
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:id="@+id/swipeLayout">
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/headerLinearLayout">
             <TextView
                 android:text="Address Line"
                 android:id="@+id/headerAddressLine"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="25"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"/>
             <TextView
                 android:text="City"
                 android:id="@+id/headerCity"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="25"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"/>
             <TextView
                 android:text="State"
                 android:id="@+id/headerState"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="25"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"/>
             <TextView
                 android:text="Zip Code"
                 android:id="@+id/headerZipCode"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="25"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"/>
         </LinearLayout>
+        <ListView
+                android:paddingTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/myListView"/>
+        </LinearLayout>
+
     </android.support.v4.widget.SwipeRefreshLayout>
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editSearch"
-            android:hint="Search ZipCodes"
+            android:hint="Search"
             android:textColor="#000"
-            android:editable="false"/>
+            android:editable="true"/>
 </FrameLayout>
