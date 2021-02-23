@@ -16,17 +16,28 @@ namespace ChristmasLightsDatabase
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        TextView textNum;
-        int number;
-        private List<addressHolder> address;
+        //
+        //UI Components
         private ListView myListView;
+        private TextView headerAddressLine;
+        private TextView headerCity;
+        private TextView headerState;
+        private TextView headerZipCode;
         SwipeRefreshLayout classSwipeRefresh;
-        LinearLayout headerLinearLayout;
         private EditText editSearch;
+        private myListViewAdapter adapter;
+        //
+        //Global Variables
         private bool animateBool = true;
         private bool isAnimating = false;
         const int editSearchHeight = 113;
-        private myListViewAdapter adapter;
+        int number;
+        private List<addressHolder> address;
+        private bool addressAscending;
+        private bool cityAscending;
+        private bool stateAscending;
+        private bool zipAscending;
+
         [System.Obsolete]
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -37,30 +48,91 @@ namespace ChristmasLightsDatabase
             //Reference swiperefresh layout, set color scheme
             classSwipeRefresh = FindViewById<SwipeRefreshLayout>(Resource.Id.swipeLayout);
             classSwipeRefresh.SetColorScheme(Android.Resource.Color.HoloBlueBright, Android.Resource.Color.HoloOrangeLight, Android.Resource.Color.HoloRedLight, Android.Resource.Color.HoloGreenLight);
-            //Reference Linear Layout holding headers
-
-            //initialize address list
+            //Initilize UI Components
+            myListView = FindViewById<ListView>(Resource.Id.myListView);
+            editSearch = FindViewById<EditText>(Resource.Id.editSearch);
+            headerAddressLine = FindViewById<TextView>(Resource.Id.headerAddressLine);
+            headerCity = FindViewById<TextView>(Resource.Id.headerCity);
+            headerState = FindViewById<TextView>(Resource.Id.headerState);
+            headerZipCode = FindViewById<TextView>(Resource.Id.headerZipCode);
+            //Initialize address list
             address = new List<addressHolder>();
             //add address objects
             address.Add(new addressHolder() { addressLine = "290 Vale Street", city = "Portland", state = "ME", zipCode = "04103", desc = "From the outside this house looks stylish. It has been built with brown stones and has red brick decorations. Short, wide windows add to the overall style of the house and have been added to the house in a mostly asymmetric way." });
             address.Add(new addressHolder() { addressLine = "2 Canal Road Lake", city = "Zurich", state = "IL", zipCode = "60047", desc = "From the outside this house looks grandiose. It has been built with grey stones and has blue stone decorations. Large, octagon windows allow enough light to enter the home and have been added to the house in a very symmetric way." });
-            //initilize list view
-            myListView = FindViewById<ListView>(Resource.Id.myListView);
-            //Reference to edit text and frame layout
-            editSearch = FindViewById<EditText>(Resource.Id.editSearch);
-            editSearch.Alpha = 0; //make edit text invisible
+            //Adjust Search bar to be invisable and viewstates to gone
+            editSearch.Alpha = 0; 
             editSearch.Visibility = ViewStates.Gone;
             //apply custom adapter to listview so we can display our address's
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
-            //click listeners
+            //Events
             myListView.ItemClick += MyListView_ItemClick;
             classSwipeRefresh.Refresh += ClassSwipeRefresh_Refresh;
-            //text changed event
             editSearch.TextChanged += EditSearch_TextChanged;
+            headerAddressLine.Click += HeaderAddressLine_Click;
+            headerCity.Click += HeaderCity_Click;
+            headerState.Click += HeaderState_Click;
+            headerZipCode.Click += HeaderZipCode_Click;
 
         }
+        //===========================================================================================================================================================
+        //Click Events
+        private void HeaderCity_Click(object sender, System.EventArgs e)
+        {
+            List<addressHolder> filteredAddress;
+            if (!cityAscending)
+                filteredAddress = (from cityAll in address orderby cityAll.city select cityAll).ToList<addressHolder>();
+            else
+                filteredAddress = (from cityAll in address orderby cityAll.city descending select cityAll).ToList<addressHolder>();
+            adapter = new myListViewAdapter(this, filteredAddress);
+            myListView.Adapter = adapter;
+            cityAscending = !cityAscending;
+        }
 
+        private void HeaderAddressLine_Click(object sender, System.EventArgs e)
+        {
+            List<addressHolder> filteredAddress;
+            if (!addressAscending)
+                filteredAddress = (from addressAll in address orderby addressAll.addressLine select addressAll).ToList<addressHolder>();
+            else
+                filteredAddress = (from addressAll in address orderby addressAll.addressLine descending select addressAll).ToList<addressHolder>();
+            adapter = new myListViewAdapter(this, filteredAddress);
+            myListView.Adapter = adapter;
+            addressAscending = !addressAscending;
+        }
+        private void HeaderZipCode_Click(object sender, System.EventArgs e)
+        {
+            List<addressHolder> filteredAddress;
+            if (!zipAscending)
+                filteredAddress = (from zipAll in address orderby zipAll.zipCode select zipAll).ToList<addressHolder>();
+            else
+                filteredAddress = (from zipAll in address orderby zipAll.zipCode descending select zipAll).ToList<addressHolder>();
+            adapter = new myListViewAdapter(this, filteredAddress);
+            myListView.Adapter = adapter;
+            zipAscending = !zipAscending;
+        }
+        private void HeaderState_Click(object sender, System.EventArgs e)
+        {
+            List<addressHolder> filteredAddress;
+            if (!stateAscending)
+                filteredAddress = (from stateAll in address orderby stateAll.state select stateAll).ToList<addressHolder>();
+            else
+                filteredAddress = (from stateAll in address orderby stateAll.state descending select stateAll).ToList<addressHolder>();
+            adapter = new myListViewAdapter(this, filteredAddress);
+            myListView.Adapter = adapter;
+            stateAscending = !stateAscending;
+        }
+        private void MyListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            //pull up dialog fragment to display more address info
+            FragmentTransaction transaction = FragmentManager.BeginTransaction();
+            dialog_AddressInfo addressInfo_Dialog = new dialog_AddressInfo(address, e.Position);
+            addressInfo_Dialog.Show(transaction, "dialog fragment");
+
+        }
+        //===========================================================================================================================================================
+        //Searching the list
         private void EditSearch_TextChanged(object sender, Android.Text.TextChangedEventArgs e)
         {
             List<addressHolder> searchedAddressHolder = (from address in address
@@ -70,7 +142,8 @@ namespace ChristmasLightsDatabase
             adapter = new myListViewAdapter(this, searchedAddressHolder);
             myListView.Adapter = adapter;
         }
-
+        //===========================================================================================================================================================
+        //Action Bar Events
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             //Show actionbar menu
@@ -92,25 +165,11 @@ namespace ChristmasLightsDatabase
                         {
                             editSearch.Visibility = ViewStates.Visible;
                             classSwipeRefresh.Animate().TranslationYBy(editSearchHeight).SetDuration(500).Start();
-                            //Using this class caused my list view to get cut in half when animating?? avoiding it for now
-                            //list view is up
-                            /*
-                            animation anim = new animation(myListView, myListView.Height - editSearch.Height);
-                            anim.Duration = 500;
-                            anim.AnimationStart += Anim_AnimationStartDown; //listener for when animation has started
-                            anim.AnimationEnd += Anim_AnimationEndDown;
-                            myListView.StartAnimation(anim);*/
                             editSearch.Animate().AlphaBy(1.0f).SetDuration(500).Start();
                         }
                         else
                         {
                             classSwipeRefresh.Animate().TranslationYBy(-editSearchHeight).SetDuration(500).Start();
-                            //Using this class caused my list view to get cut in half when animating?? avoiding it for now
-                            /*animation anim = new animation(myListView, myListView.Height + editSearch.Height);
-                            anim.Duration = 500;
-                            anim.AnimationStart += Anim_AnimationStartUp; //listener for when animation has started
-                            anim.AnimationEnd += Anim_AnimationEndUp;
-                            myListView.StartAnimation(anim);*/
                             editSearch.Animate().AlphaBy(-1.0f).SetDuration(300).Start();
                             editSearch.Visibility = ViewStates.Gone;
                         }
@@ -126,31 +185,10 @@ namespace ChristmasLightsDatabase
                     return true;
                 default:
                     return base.OnOptionsItemSelected(item);
-            }
-            
+            } 
         }
-        //Old events, will delete if I can figure out why it breaks my list view later
-        /*private void Anim_AnimationEndDown(object sender, Android.Views.Animations.Animation.AnimationEndEventArgs e)
-        {
-            isAnimating = false;
-        }
-        private void Anim_AnimationEndUp(object sender, Android.Views.Animations.Animation.AnimationEndEventArgs e)
-        {
-            isAnimating = false;
-        }
-
-        private void Anim_AnimationStartDown(object sender, Android.Views.Animations.Animation.AnimationStartEventArgs e)
-        {
-            isAnimating = true;
-            editSearch.Animate().AlphaBy(1.0f).SetDuration(500).Start();
-            
-        }
-        private void Anim_AnimationStartUp(object sender, Android.Views.Animations.Animation.AnimationStartEventArgs e)
-        {
-            isAnimating = true;
-            editSearch.Animate().AlphaBy(-1.0f).SetDuration(300).Start();
-        }*/
-
+        //===========================================================================================================================================================
+        //Swipe Refresh Events
         private void ClassSwipeRefresh_Refresh(object sender, System.EventArgs e)
         {
             BackgroundWorker worker = new BackgroundWorker();
@@ -170,6 +208,8 @@ namespace ChristmasLightsDatabase
             //Add SQL Code to refresh here, for now we are sleeping
             Thread.Sleep(3000);
         }
+        //===========================================================================================================================================================
+        //Add new address to list
         private void AddNewAddress_dialog_OnAddNewAddressComplete(object sender, OnAddNewAddress e)
         {
             //Event that is fired when they click the add new address button on the dialog fragment, add the new address to the list
@@ -177,14 +217,7 @@ namespace ChristmasLightsDatabase
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
         }
-        private void MyListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
-        {
-            //pull up dialog fragment to display more address info
-            FragmentTransaction transaction = FragmentManager.BeginTransaction();
-            dialog_AddressInfo addressInfo_Dialog = new dialog_AddressInfo(address, e.Position);
-            addressInfo_Dialog.Show(transaction, "dialog fragment");
-
-        }
+        
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
