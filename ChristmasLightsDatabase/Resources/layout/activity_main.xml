@@ -8,9 +8,10 @@
     <android.support.v4.widget.SwipeRefreshLayout 
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
+        android:fillViewport="true"
         android:id="@+id/swipeLayout">
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,35 +23,43 @@
             android:orientation="horizontal"
             android:id="@+id/headerLinearLayout">
             <TextView
+                android:text="Thumbnail"
+                android:id="@+id/headerThumb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".01"
+                android:gravity="center_horizontal"
+                android:textSize="16sp"/>
+            <TextView
                 android:text="Address Line"
                 android:id="@+id/headerAddressLine"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="25"
+                android:layout_weight=".01"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"/>
             <TextView
                 android:text="City"
                 android:id="@+id/headerCity"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="25"
+                android:layout_weight=".01"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"/>
             <TextView
                 android:text="State"
                 android:id="@+id/headerState"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="25"
+                android:layout_weight=".01"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"/>
             <TextView
                 android:text="Zip Code"
                 android:id="@+id/headerZipCode"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="25"
+                android:layout_weight=".01"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"/>
         </LinearLayout>

@@ -3,29 +3,35 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ImageView
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView1"
+        android:layout_weight=".01"/>
     <TextView
         android:text="Address Line"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtAddressLine"
-        android:layout_weight="1" />
+        android:layout_weight=".01"/>
     <TextView
         android:text="City"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtCity"
-        android:layout_weight="1" />
+        android:layout_weight=".01"/>
     <TextView
         android:text="State"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtState"
-        android:layout_weight="1" />
+        android:layout_weight=".01"/>
     <TextView
         android:text="Zip Code"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtZipCode"
-        android:layout_weight="1" />
+        android:layout_weight=".01"/>
 
 </LinearLayout>
