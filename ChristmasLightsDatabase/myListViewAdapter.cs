@@ -5,6 +5,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -46,6 +47,11 @@ namespace ChristmasLightsDatabase
             txtState.Text = mItems[position].state;
             TextView txtZipCode = row.FindViewById<TextView>(Resource.Id.txtZipCode);
             txtZipCode.Text = mItems[position].zipCode;
+            ImageView thumbNail = row.FindViewById<ImageView>(Resource.Id.imageViewThumbnail);
+            if(mItems[position].image != null)
+            {
+                thumbNail.SetImageBitmap(BitmapFactory.DecodeByteArray(mItems[position].image, 0, mItems[position].image.Length));
+            }
             return row;
         }
 

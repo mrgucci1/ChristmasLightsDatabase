@@ -15,6 +15,10 @@ using Android.Support.V7.App;
 using Android.Runtime;
 using Android.Widget;
 using System.Collections.Generic;
+using System.Drawing;
+using Android.Graphics.Drawables;
+using Java.IO;
+using Android.Graphics;
 
 namespace ChristmasLightsDatabase
 {
@@ -26,6 +30,7 @@ namespace ChristmasLightsDatabase
         private string state;
         private string zipCode;
         private string desc;
+        private byte[] image;
         public string AddressLine
         {
             get { return addressLine; }
@@ -51,25 +56,53 @@ namespace ChristmasLightsDatabase
             get { return desc; }
             set { desc = value; }
         }
-        public OnAddNewAddress(string paddressLine, string pcity, string pstate, string pzipCode, string pdesc) : base()
+        public byte[] Image
+        {
+            get { return image; }
+            set { image = value; }
+        }
+        public OnAddNewAddress(string paddressLine, string pcity, string pstate, string pzipCode, string pdesc, byte[] pImage) : base()
         {
             AddressLine = paddressLine;
             City = pcity;
             State = pstate;
             ZipCode = pzipCode;
             Desc = pdesc;
+            Image = pImage;
+        }
+    }
+    public class OnAddNewPhotos : EventArgs
+    {
+        private byte[] imageByte;
+        private ImageView imageView;
+        public byte[] imageGetter
+        {
+            get { return imageByte; }
+            set { imageByte = value; }
+        }
+        public ImageView imageViewGetter
+        {
+            get { return imageView; }
+            set { imageView = value; }
+        }
+        public OnAddNewPhotos(ImageView pImageView) : base()
+        {
+            imageView = pImageView;
         }
     }
     class dialog_AddNewAddress : DialogFragment
     {
         private Button buttonAddNew;
+        private Button buttonChoosePhoto;
         private EditText editAddressLine;
         private EditText editCity;
         private EditText editState;
         private EditText editZipCode;
         private EditText editDesc;
+        private ImageView imageViewMain;
         //Event to broadcast, using custom even args
         public event EventHandler<OnAddNewAddress> OnAddNewAddressComplete;
+        public event EventHandler<OnAddNewPhotos> OnAddNewPhotoClick;
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
@@ -81,9 +114,20 @@ namespace ChristmasLightsDatabase
             editState = view.FindViewById<EditText>(Resource.Id.editState);
             editZipCode = view.FindViewById<EditText>(Resource.Id.editZipCode);
             editDesc = view.FindViewById<EditText>(Resource.Id.editDesc);
+            imageViewMain = view.FindViewById<ImageView>(Resource.Id.imageViewMain);
+            buttonChoosePhoto = view.FindViewById<Button>(Resource.Id.buttonChoosePhoto);
+                buttonChoosePhoto.Click += ButtonChoosePhoto_Click;
             buttonAddNew.Click += ButtonAddNew_Click;
+
             return view;
         }
+
+        private void ButtonChoosePhoto_Click(object sender, EventArgs e)
+        {
+            //Clicked choose photo, broadcase event
+            OnAddNewPhotoClick.Invoke(this, new OnAddNewPhotos(imageViewMain));
+        }
+
         public override void OnActivityCreated(Bundle savedInstanceState)
         {
             base.OnActivityCreated(savedInstanceState);
@@ -91,7 +135,7 @@ namespace ChristmasLightsDatabase
         private void ButtonAddNew_Click(object sender, EventArgs e)
         {
             //Clicked add new address, broadcast the event
-            OnAddNewAddressComplete.Invoke(this, new OnAddNewAddress(editAddressLine.Text, editCity.Text, editState.Text, editZipCode.Text, editDesc.Text));
+            OnAddNewAddressComplete.Invoke(this, new OnAddNewAddress(editAddressLine.Text, editCity.Text, editState.Text, editZipCode.Text, editDesc.Text, (byte[])imageViewMain));
             //dismiss diaglog fragment
             this.Dismiss();
         }

@@ -43,20 +43,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonChoosePhoto"
-            android:layout_weight="1" />
-        <Button
-            android:text="Choose Photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonUploadPhoto"
-            android:layout_weight="1"/>
+            android:layout_weight=".01" />
         
     </LinearLayout>
     <ImageView
         android:src="@android:drawable/ic_menu_gallery"
         android:layout_width="250dp"
         android:layout_height="200dp"
-        android:id="@+id/imageView1"
+        android:id="@+id/imageViewMain"
         android:layout_gravity="center" />
     <Button
         android:text="Add new address"

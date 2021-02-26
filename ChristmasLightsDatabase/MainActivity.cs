@@ -10,6 +10,7 @@ using System.Threading;
 using Android.Views;
 using Android.Views.InputMethods;
 using System.Linq;
+using System;
 
 namespace ChristmasLightsDatabase
 {
@@ -132,7 +133,7 @@ namespace ChristmasLightsDatabase
 
         }
         //===========================================================================================================================================================
-        //Searching the list
+        //Searching the list // Adding Image
         private void EditSearch_TextChanged(object sender, Android.Text.TextChangedEventArgs e)
         {
             List<addressHolder> searchedAddressHolder = (from address in address
@@ -141,6 +142,10 @@ namespace ChristmasLightsDatabase
                                                          select address).ToList<addressHolder>();
             adapter = new myListViewAdapter(this, searchedAddressHolder);
             myListView.Adapter = adapter;
+        }
+        private void pictureSelected(ImageView selectedPicture)
+        {
+
         }
         //===========================================================================================================================================================
         //Action Bar Events
@@ -213,7 +218,7 @@ namespace ChristmasLightsDatabase
         private void AddNewAddress_dialog_OnAddNewAddressComplete(object sender, OnAddNewAddress e)
         {
             //Event that is fired when they click the add new address button on the dialog fragment, add the new address to the list
-            address.Add(new addressHolder() { addressLine = e.AddressLine, city = e.City, state = e.State, zipCode = e.State, desc = e.Desc });
+            address.Add(new addressHolder() { addressLine = e.AddressLine, city = e.City, state = e.State, zipCode = e.State, desc = e.Desc, image = e.Image });
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
         }

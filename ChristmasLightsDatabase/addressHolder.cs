@@ -20,5 +20,5 @@ namespace ChristmasLightsDatabase
         public string state { get; set; }
         public string zipCode { get; set; }
         public string desc { get; set; }
+        public byte[] image { get; set; }
     }
-}

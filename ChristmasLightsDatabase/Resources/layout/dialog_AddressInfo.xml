@@ -18,7 +18,7 @@
         android:paddingRight="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="24dp"
+        android:textSize="16dp"
         android:textColor="#ff000000" />
     <TextView
         android:text="addressLineValue"
@@ -38,7 +38,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:id="@+id/cityHeader"
-        android:textSize="24dp"
+        android:textSize="16dp"
         android:textColor="#ff000000"/>
     <TextView
         android:text="cityValue"
@@ -58,7 +58,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:id="@+id/stateHeader"
-        android:textSize="24dp"
+        android:textSize="16dp"
         android:textColor="#ff000000"/>
     <TextView
         android:text="stateValue"
@@ -78,7 +78,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:id="@+id/zipHeader"
-        android:textSize="24dp"
+        android:textSize="16dp"
         android:textColor="#ff000000"/>
     <TextView
         android:text="zipValue"
@@ -98,7 +98,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:id="@+id/descHeader"
-        android:textSize="24dp"
+        android:textSize="16dp"
         android:textColor="#ff000000"/>
     <TextView
         android:text="descValue"
@@ -109,6 +109,11 @@
         android:id="@+id/descValue"
         android:textSize="13dp"
         android:textColor="#ff000000"/>
+    <ImageView
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView" />
 
 
 </LinearLayout>
