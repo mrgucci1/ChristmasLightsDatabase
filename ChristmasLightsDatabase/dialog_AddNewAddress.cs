@@ -15,7 +15,6 @@ using Android.Support.V7.App;
 using Android.Runtime;
 using Android.Widget;
 using System.Collections.Generic;
-using System.Drawing;
 using Android.Graphics.Drawables;
 using Java.IO;
 using Android.Graphics;
@@ -30,7 +29,7 @@ namespace ChristmasLightsDatabase
         private string state;
         private string zipCode;
         private string desc;
-        private byte[] image;
+        private Bitmap image;
         public string AddressLine
         {
             get { return addressLine; }
@@ -56,12 +55,12 @@ namespace ChristmasLightsDatabase
             get { return desc; }
             set { desc = value; }
         }
-        public byte[] Image
+        public Bitmap Image
         {
             get { return image; }
             set { image = value; }
         }
-        public OnAddNewAddress(string paddressLine, string pcity, string pstate, string pzipCode, string pdesc, byte[] pImage) : base()
+        public OnAddNewAddress(string paddressLine, string pcity, string pstate, string pzipCode, string pdesc, Bitmap pImage) : base()
         {
             AddressLine = paddressLine;
             City = pcity;
@@ -116,7 +115,7 @@ namespace ChristmasLightsDatabase
             editDesc = view.FindViewById<EditText>(Resource.Id.editDesc);
             imageViewMain = view.FindViewById<ImageView>(Resource.Id.imageViewMain);
             buttonChoosePhoto = view.FindViewById<Button>(Resource.Id.buttonChoosePhoto);
-                buttonChoosePhoto.Click += ButtonChoosePhoto_Click;
+            buttonChoosePhoto.Click += ButtonChoosePhoto_Click;
             buttonAddNew.Click += ButtonAddNew_Click;
 
             return view;
@@ -134,8 +133,11 @@ namespace ChristmasLightsDatabase
         }
         private void ButtonAddNew_Click(object sender, EventArgs e)
         {
+            //Decode bitmap
+            Android.Graphics.Drawables.BitmapDrawable bd = (Android.Graphics.Drawables.BitmapDrawable)imageViewMain.Drawable;
+            Android.Graphics.Bitmap bitmap = bd.Bitmap;
             //Clicked add new address, broadcast the event
-            OnAddNewAddressComplete.Invoke(this, new OnAddNewAddress(editAddressLine.Text, editCity.Text, editState.Text, editZipCode.Text, editDesc.Text, (byte[])imageViewMain));
+            OnAddNewAddressComplete.Invoke(this, new OnAddNewAddress(editAddressLine.Text, editCity.Text, editState.Text, editZipCode.Text, editDesc.Text, bitmap));
             //dismiss diaglog fragment
             this.Dismiss();
         }

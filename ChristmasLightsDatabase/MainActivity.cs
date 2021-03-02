@@ -11,6 +11,9 @@ using Android.Views;
 using Android.Views.InputMethods;
 using System.Linq;
 using System;
+using Android.Content;
+using System.IO;
+using Android.Graphics;
 
 namespace ChristmasLightsDatabase
 {
@@ -27,6 +30,7 @@ namespace ChristmasLightsDatabase
         SwipeRefreshLayout classSwipeRefresh;
         private EditText editSearch;
         private myListViewAdapter adapter;
+        private ImageView imageViewHolder;
         //
         //Global Variables
         private bool animateBool = true;
@@ -62,7 +66,7 @@ namespace ChristmasLightsDatabase
             address.Add(new addressHolder() { addressLine = "290 Vale Street", city = "Portland", state = "ME", zipCode = "04103", desc = "From the outside this house looks stylish. It has been built with brown stones and has red brick decorations. Short, wide windows add to the overall style of the house and have been added to the house in a mostly asymmetric way." });
             address.Add(new addressHolder() { addressLine = "2 Canal Road Lake", city = "Zurich", state = "IL", zipCode = "60047", desc = "From the outside this house looks grandiose. It has been built with grey stones and has blue stone decorations. Large, octagon windows allow enough light to enter the home and have been added to the house in a very symmetric way." });
             //Adjust Search bar to be invisable and viewstates to gone
-            editSearch.Alpha = 0; 
+            editSearch.Alpha = 0;
             editSearch.Visibility = ViewStates.Gone;
             //apply custom adapter to listview so we can display our address's
             adapter = new myListViewAdapter(this, address);
@@ -187,10 +191,11 @@ namespace ChristmasLightsDatabase
                     addNewAddress_dialog.Show(transaction, "dialog fragment");
                     //Subscribe to on add new address event
                     addNewAddress_dialog.OnAddNewAddressComplete += AddNewAddress_dialog_OnAddNewAddressComplete;
+                    addNewAddress_dialog.OnAddNewPhotoClick += AddNewAddress_dialog_OnAddNewPhotoClick;
                     return true;
                 default:
                     return base.OnOptionsItemSelected(item);
-            } 
+            }
         }
         //===========================================================================================================================================================
         //Swipe Refresh Events
@@ -214,7 +219,7 @@ namespace ChristmasLightsDatabase
             Thread.Sleep(3000);
         }
         //===========================================================================================================================================================
-        //Add new address to list
+        //Add new address dialog fragment event
         private void AddNewAddress_dialog_OnAddNewAddressComplete(object sender, OnAddNewAddress e)
         {
             //Event that is fired when they click the add new address button on the dialog fragment, add the new address to the list
@@ -222,7 +227,58 @@ namespace ChristmasLightsDatabase
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
         }
-        
+        //===========================================================================================================================================================
+        //Add new Photo from dialog fragment
+        private void AddNewAddress_dialog_OnAddNewPhotoClick(object sender, OnAddNewPhotos e)
+        {
+            imageViewHolder = e.imageViewGetter;
+            Intent intent = new Intent();
+            intent.SetType("image/*");
+            intent.SetAction(Intent.ActionGetContent);
+            StartActivityForResult(Intent.CreateChooser(intent, "Selected Choose Photo Button"), 0);
+        }
+        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            if (resultCode == Result.Ok)
+            {
+                Stream imageStream = ContentResolver.OpenInputStream(data.Data);
+                imageViewHolder.SetImageBitmap(DecodeBitmapFromStream(data.Data,150,150));
+            }
+        }
+        private Bitmap DecodeBitmapFromStream(Android.Net.Uri data, int reqWidth, int reqHeight)
+        {
+            //Determine size of image, dont want to crash app
+            Stream imageStream = ContentResolver.OpenInputStream(data);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.InJustDecodeBounds = true;
+            BitmapFactory.DecodeStream(imageStream);
+            //Calc sample size
+            options.InSampleSize = CalcInSampleSize(options, reqWidth, reqHeight);
+            //Decode bitmap with our calculated sample size
+            imageStream = ContentResolver.OpenInputStream(data);
+            options.InJustDecodeBounds = false;
+            Bitmap bitmap = BitmapFactory.DecodeStream(imageStream, null, options);
+            return bitmap;
+        }
+        private int CalcInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
+        {
+            //Raw heigh and widith
+            int height = options.OutHeight;
+            int width = options.OutWidth;
+            int sampleSize = 1;
+            if (height > reqHeight || width > reqWidth)
+            {
+                //bigger than we want it
+                int halfHeight = height / 2;
+                int halfWidth = width / 2;
+                while((halfHeight / sampleSize) > reqHeight && (halfWidth / sampleSize) > reqWidth)
+                {
+                    sampleSize *= 2;
+                }
+            }
+            return sampleSize;
+        }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);

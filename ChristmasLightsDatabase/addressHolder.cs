@@ -5,6 +5,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -20,5 +21,6 @@ namespace ChristmasLightsDatabase
         public string state { get; set; }
         public string zipCode { get; set; }
         public string desc { get; set; }
-        public byte[] image { get; set; }
+        public Bitmap image { get; set; }
     }
+}

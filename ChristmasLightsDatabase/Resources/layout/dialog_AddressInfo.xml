@@ -7,6 +7,11 @@
     android:layout_height="fill_parent"
     android:minHeight="400dp"
     android:minWidth = "300dp">
+    <ImageView
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView" />
     <TextView
         android:text="Address Line"
         android:layout_width="match_parent"
@@ -109,11 +114,7 @@
         android:id="@+id/descValue"
         android:textSize="13dp"
         android:textColor="#ff000000"/>
-    <ImageView
-        android:src="@android:drawable/ic_menu_gallery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView" />
+    
 
 
 </LinearLayout>

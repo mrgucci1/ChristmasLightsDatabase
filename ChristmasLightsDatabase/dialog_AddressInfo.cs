@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -19,6 +20,8 @@ namespace ChristmasLightsDatabase
         private TextView ZipCodeValue;
         private TextView DescValue;
         string addressLine, city, state, zipCode, desc;
+        Bitmap imageBitmap;
+        private ImageView imageView;
         public dialog_AddressInfo(List<addressHolder> mItems, int position)
         {
             addressLine = mItems[position].addressLine;
@@ -26,6 +29,7 @@ namespace ChristmasLightsDatabase
             state = mItems[position].state;
             zipCode = mItems[position].zipCode;
             desc = mItems[position].desc;
+            imageBitmap = mItems[position].image;
 
         }
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -42,6 +46,8 @@ namespace ChristmasLightsDatabase
             ZipCodeValue.Text = zipCode;
             DescValue = view.FindViewById<TextView>(Resource.Id.descValue);
             DescValue.Text = desc;
+            imageView = view.FindViewById<ImageView>(Resource.Id.imageView);
+            imageView.SetImageBitmap(imageBitmap);
             return view;
         }
     }
