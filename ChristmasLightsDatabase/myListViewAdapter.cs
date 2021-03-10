@@ -49,7 +49,7 @@ namespace ChristmasLightsDatabase
             txtZipCode.Text = mItems[position].zipCode;
             ImageView thumbNail = row.FindViewById<ImageView>(Resource.Id.imageViewThumbnail);
             if(mItems[position].image != null)
-                thumbNail.SetImageBitmap(mItems[position].image);
+                thumbNail.SetImageBitmap(Bitmap.CreateScaledBitmap(mItems[position].image,120,120,false));
             return row;
         }
 
