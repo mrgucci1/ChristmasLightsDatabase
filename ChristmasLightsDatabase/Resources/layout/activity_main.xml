@@ -4,7 +4,10 @@
         android:layout_height="fill_parent"
         android:orientation="vertical"
         android:id="@+id/frameLayoutParent"
-        android:background="@android:color/holo_green_dark">
+        android:background="#4F703A">
+        <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
     <android.support.v4.widget.SwipeRefreshLayout 
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -78,4 +81,5 @@
             android:hint="Search"
             android:textColor="#000"
             android:editable="true"/>
+
 </FrameLayout>

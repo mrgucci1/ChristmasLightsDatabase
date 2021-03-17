@@ -71,6 +71,10 @@ namespace ChristmasLightsDatabase
             //apply custom adapter to listview so we can display our address's
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
+            //Activate customer toolbar
+            var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
+            SetActionBar(toolbar);
+            ActionBar.Title = "";
             //Events
             myListView.ItemClick += MyListView_ItemClick;
             classSwipeRefresh.Refresh += ClassSwipeRefresh_Refresh;
