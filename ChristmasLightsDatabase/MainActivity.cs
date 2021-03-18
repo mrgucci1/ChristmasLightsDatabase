@@ -17,8 +17,8 @@ using Android.Graphics;
 
 namespace ChristmasLightsDatabase
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
-    public class MainActivity : AppCompatActivity
+    [Activity(Label = "@string/app_name", Theme = "@style/MyTheme", MainLauncher = true)]
+    public class MainActivity : Activity
     {
         //
         //UI Components
