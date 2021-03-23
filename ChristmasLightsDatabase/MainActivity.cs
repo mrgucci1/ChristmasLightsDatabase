@@ -1,6 +1,5 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Support.V7.App;
 using Android.Runtime;
 using Android.Widget;
 using System.Collections.Generic;
@@ -31,6 +30,7 @@ namespace ChristmasLightsDatabase
         private EditText editSearch;
         private myListViewAdapter adapter;
         private ImageView imageViewHolder;
+        private Toolbar toolBar;
         //
         //Global Variables
         private bool animateBool = true;
@@ -72,9 +72,12 @@ namespace ChristmasLightsDatabase
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
             //Activate customer toolbar
-            var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
-            SetActionBar(toolbar);
-            ActionBar.Title = "";
+            toolBar = FindViewById<Toolbar>(Resource.Id.toolbar);
+            toolBar.InflateMenu(Resource.Menu.home);
+            toolBar.MenuItemClick += ToolBar_MenuItemClick;
+            //SetActionBar(toolBar);
+            //ActionBar.Title = "";
+            //toolbar.InflateMenu(Resource.Menu.actionbar);
             //Events
             myListView.ItemClick += MyListView_ItemClick;
             classSwipeRefresh.Refresh += ClassSwipeRefresh_Refresh;
@@ -85,6 +88,12 @@ namespace ChristmasLightsDatabase
             headerZipCode.Click += HeaderZipCode_Click;
 
         }
+
+        private void ToolBar_MenuItemClick(object sender, Toolbar.MenuItemClickEventArgs e)
+        {
+            Toast.MakeText(this, "Bottom toolbar pressed: " + e.Item.TitleFormatted, ToastLength.Short).Show();
+        }
+
         //===========================================================================================================================================================
         //Click Events
         private void HeaderCity_Click(object sender, System.EventArgs e)
@@ -151,21 +160,18 @@ namespace ChristmasLightsDatabase
             adapter = new myListViewAdapter(this, searchedAddressHolder);
             myListView.Adapter = adapter;
         }
-        private void pictureSelected(ImageView selectedPicture)
-        {
-
-        }
         //===========================================================================================================================================================
         //Action Bar Events
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             //Show actionbar menu
-            MenuInflater.Inflate(Resource.Menu.actionbar, menu);
+            MenuInflater.Inflate(Resource.Menu.home, menu);
             return base.OnCreateOptionsMenu(menu);
         }
         //animate search bar
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
+            Toast.MakeText(this, "Top ActionBar pressed: " + item.TitleFormatted, ToastLength.Short).Show();
             switch (item.ItemId)
             {
                 case Resource.Id.action_search:
