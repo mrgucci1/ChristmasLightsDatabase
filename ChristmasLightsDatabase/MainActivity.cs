@@ -1,7 +1,6 @@
 ﻿using Android.App;
 using Android.OS;
 using Android.Runtime;
-using Android.Widget;
 using System.Collections.Generic;
 using Android.Support.V4.Widget;
 using System.ComponentModel;
@@ -10,14 +9,17 @@ using Android.Views;
 using Android.Views.InputMethods;
 using System.Linq;
 using System;
+using Android.Support.V7.App;
 using Android.Content;
 using System.IO;
 using Android.Graphics;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
+using Android.Widget;
 
 namespace ChristmasLightsDatabase
 {
     [Activity(Label = "@string/app_name", Theme = "@style/MyTheme", MainLauncher = true)]
-    public class MainActivity : Activity
+    public class MainActivity : AppCompatActivity
     {
         //
         //UI Components
@@ -73,11 +75,8 @@ namespace ChristmasLightsDatabase
             myListView.Adapter = adapter;
             //Activate customer toolbar
             toolBar = FindViewById<Toolbar>(Resource.Id.toolbar);
-            toolBar.InflateMenu(Resource.Menu.home);
-            toolBar.MenuItemClick += ToolBar_MenuItemClick;
-            //SetActionBar(toolBar);
-            //ActionBar.Title = "";
-            //toolbar.InflateMenu(Resource.Menu.actionbar);
+            SetSupportActionBar(toolBar);
+            SupportActionBar.Title = "";
             //Events
             myListView.ItemClick += MyListView_ItemClick;
             classSwipeRefresh.Refresh += ClassSwipeRefresh_Refresh;
@@ -88,12 +87,6 @@ namespace ChristmasLightsDatabase
             headerZipCode.Click += HeaderZipCode_Click;
 
         }
-
-        private void ToolBar_MenuItemClick(object sender, Toolbar.MenuItemClickEventArgs e)
-        {
-            Toast.MakeText(this, "Bottom toolbar pressed: " + e.Item.TitleFormatted, ToastLength.Short).Show();
-        }
-
         //===========================================================================================================================================================
         //Click Events
         private void HeaderCity_Click(object sender, System.EventArgs e)
@@ -165,7 +158,7 @@ namespace ChristmasLightsDatabase
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             //Show actionbar menu
-            MenuInflater.Inflate(Resource.Menu.home, menu);
+            MenuInflater.Inflate(Resource.Menu.actionbar, menu);
             return base.OnCreateOptionsMenu(menu);
         }
         //animate search bar
