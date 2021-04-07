@@ -15,6 +15,8 @@ using System.IO;
 using Android.Graphics;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 using Android.Widget;
+using System.Net;
+using System.Collections.Specialized;
 
 namespace ChristmasLightsDatabase
 {
@@ -226,9 +228,19 @@ namespace ChristmasLightsDatabase
         private void AddNewAddress_dialog_OnAddNewAddressComplete(object sender, OnAddNewAddress e)
         {
             //Event that is fired when they click the add new address button on the dialog fragment, add the new address to the list
-            address.Add(new addressHolder() { addressLine = e.AddressLine, city = e.City, state = e.State, zipCode = e.State, desc = e.Desc, image = e.Image });
+            address.Add(new addressHolder() { addressLine = e.AddressLine, city = e.City, state = e.State, zipCode = e.ZipCode, desc = e.Desc, image = e.Image });
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
+            WebClient client = new WebClient();
+            Uri uri = new Uri("http://localhost/christmaslightsPHP/createAddress.php");
+            NameValueCollection parameters = new NameValueCollection();
+            parameters.Add("date", DateTime.Now.ToString("MM-dd-yyyy"));
+            parameters.Add("addressLine", e.AddressLine);
+            parameters.Add("city", e.City);
+            parameters.Add("state", e.State);
+            parameters.Add("zipCode", e.ZipCode);
+            parameters.Add("description", e.Desc);
+            client.UploadValuesAsync(uri, parameters);
         }
         //===========================================================================================================================================================
         //Add new Photo from dialog fragment
