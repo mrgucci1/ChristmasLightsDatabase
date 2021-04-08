@@ -17,6 +17,8 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 using Android.Widget;
 using System.Net;
 using System.Collections.Specialized;
+using System.Text;
+using System.Net.Http;
 
 namespace ChristmasLightsDatabase
 {
@@ -166,7 +168,7 @@ namespace ChristmasLightsDatabase
         //animate search bar
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            Toast.MakeText(this, "Top ActionBar pressed: " + item.TitleFormatted, ToastLength.Short).Show();
+            Toast.MakeText(this, "Top ActionBar pressed: " + item.TitleFormatted, ToastLength.Long).Show();
             switch (item.ItemId)
             {
                 case Resource.Id.action_search:
@@ -225,22 +227,18 @@ namespace ChristmasLightsDatabase
         }
         //===========================================================================================================================================================
         //Add new address dialog fragment event
-        private void AddNewAddress_dialog_OnAddNewAddressComplete(object sender, OnAddNewAddress e)
+        private async void AddNewAddress_dialog_OnAddNewAddressComplete(object sender, OnAddNewAddress e)
         {
             //Event that is fired when they click the add new address button on the dialog fragment, add the new address to the list
             address.Add(new addressHolder() { addressLine = e.AddressLine, city = e.City, state = e.State, zipCode = e.ZipCode, desc = e.Desc, image = e.Image });
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
-            WebClient client = new WebClient();
-            Uri uri = new Uri("http://localhost/christmaslightsPHP/createAddress.php");
-            NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("date", DateTime.Now.ToString("MM-dd-yyyy"));
-            parameters.Add("addressLine", e.AddressLine);
-            parameters.Add("city", e.City);
-            parameters.Add("state", e.State);
-            parameters.Add("zipCode", e.ZipCode);
-            parameters.Add("description", e.Desc);
-            client.UploadValuesAsync(uri, parameters);
+            HttpClient client = new HttpClient();
+            var url = "localhost/christmaslightsPHP/createAddress.php";
+            var parameters = new Dictionary<string, string> { { "date", DateTime.Now.ToString("MM-dd-yyyy") }, { "addressLine", e.AddressLine }, { "city", e.City }, { "state", e.State }, {"zipCode", e.ZipCode },{ "description",e.Desc} };
+            var encodedContent = new FormUrlEncodedContent(parameters);
+            var response = await client.PutAsync(url, encodedContent);
+            Toast.MakeText(this, response.ToString(), ToastLength.Long).Show();
         }
         //===========================================================================================================================================================
         //Add new Photo from dialog fragment
