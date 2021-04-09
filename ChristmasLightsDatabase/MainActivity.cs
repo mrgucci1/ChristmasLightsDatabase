@@ -233,12 +233,16 @@ namespace ChristmasLightsDatabase
             address.Add(new addressHolder() { addressLine = e.AddressLine, city = e.City, state = e.State, zipCode = e.ZipCode, desc = e.Desc, image = e.Image });
             adapter = new myListViewAdapter(this, address);
             myListView.Adapter = adapter;
-            HttpClient client = new HttpClient();
-            var url = "localhost/christmaslightsPHP/createAddress.php";
-            var parameters = new Dictionary<string, string> { { "date", DateTime.Now.ToString("MM-dd-yyyy") }, { "addressLine", e.AddressLine }, { "city", e.City }, { "state", e.State }, {"zipCode", e.ZipCode },{ "description",e.Desc} };
-            var encodedContent = new FormUrlEncodedContent(parameters);
-            var response = await client.PutAsync(url, encodedContent);
-            Toast.MakeText(this, response.ToString(), ToastLength.Long).Show();
+            WebClient client = new WebClient();
+            Uri uri = new Uri("http://192.168.1.22:80/christmaslightsPHP/createAddress.php");
+            NameValueCollection parameters = new NameValueCollection();
+            parameters.Add("date", DateTime.Now.ToString("MM-dd-yyyy"));
+            parameters.Add("addressLine", e.AddressLine);
+            parameters.Add("city", e.City);
+            parameters.Add("state", e.State);
+            parameters.Add("zipCode", e.ZipCode);
+            parameters.Add("description", e.Desc);
+            client.UploadValuesAsync(uri, parameters);
         }
         //===========================================================================================================================================================
         //Add new Photo from dialog fragment
