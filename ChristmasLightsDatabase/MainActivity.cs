@@ -242,6 +242,11 @@ namespace ChristmasLightsDatabase
             parameters.Add("state", e.State);
             parameters.Add("zipCode", e.ZipCode);
             parameters.Add("description", e.Desc);
+            //Photo stuff 
+            MemoryStream memStream = new MemoryStream();
+            e.Image.Compress(Bitmap.CompressFormat.Webp, 100, memStream);
+            byte[] imageData = memStream.ToArray();
+            parameters.Add("image", Convert.ToBase64String(imageData));
             client.UploadValuesAsync(uri, parameters);
         }
         //===========================================================================================================================================================

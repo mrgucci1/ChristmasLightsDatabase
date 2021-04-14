@@ -18,14 +18,17 @@
 	$pState = $_POST['state'];
 	$pZipCode = $_POST['zipCode'];
 	$pDesc = $_POST['description'];
+	$pImage = $_POST['image'];
+	//Decode image
+	$imageData = base64_decode($pImage);
 	//Set up connection
 	$conn = OpenCon();
 	if ($conn->connect_error) 
 	{
 		die("Connection failed: " . $conn->connect_error);
 	}
-	$sql = "INSERT INTO `maintable` (`date`, `addressline`, `city`, `state`, `zipcode`, `desc`)
-			VALUES ('$pDate', '$pAddressLine', '$pCity', '$pState', $pZipCode, '$pDesc')";
+	$sql = "INSERT INTO `maintable` (`date`, `addressline`, `city`, `state`, `zipcode`, `desc`, `imageData`)
+			VALUES ('$pDate', '$pAddressLine', '$pCity', '$pState', $pZipCode, '$pDesc', '$imageData')";
 	if($conn->query($sql) === TRUE)
 	{
 		echo "Record Created Successfully";	
