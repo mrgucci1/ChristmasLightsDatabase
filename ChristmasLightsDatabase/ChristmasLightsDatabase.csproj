@@ -173,6 +173,9 @@
     <Content Include="check_db_connection.php" />
     <Content Include="createAddress.php" />
     <Content Include="db_connection.php" />
+    <Content Include="getAddresses.php">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

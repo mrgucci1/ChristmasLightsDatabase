@@ -48,6 +48,11 @@ namespace ChristmasLightsDatabase
         private bool cityAscending;
         private bool stateAscending;
         private bool zipAscending;
+        //
+        //Downloading Data Global Variables
+        private ProgressBar mProgressBar;
+        private WebClient mClient;
+        private Uri mUrl;
 
         [System.Obsolete]
         protected override void OnCreate(Bundle savedInstanceState)
@@ -81,6 +86,11 @@ namespace ChristmasLightsDatabase
             toolBar = FindViewById<Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolBar);
             SupportActionBar.Title = "";
+            //Download data from MYSQL Using PHP
+            mProgressBar = FindViewById<ProgressBar>Resource.Id.progressBar);
+            mClient = new WebClient();
+            mUrl = new Uri("http://192.168.1.22:80/christmaslightsPHP/getAddresses.php");
+            mClient.DownloadDataAsync(mUrl);
             //Events
             myListView.ItemClick += MyListView_ItemClick;
             classSwipeRefresh.Refresh += ClassSwipeRefresh_Refresh;
@@ -89,6 +99,7 @@ namespace ChristmasLightsDatabase
             headerCity.Click += HeaderCity_Click;
             headerState.Click += HeaderState_Click;
             headerZipCode.Click += HeaderZipCode_Click;
+            mClient.DownloadDataCompleted += MClient_DownloadDataCompleted;
 
         }
         //===========================================================================================================================================================
@@ -248,6 +259,12 @@ namespace ChristmasLightsDatabase
             byte[] imageData = memStream.ToArray();
             parameters.Add("image", Convert.ToBase64String(imageData));
             client.UploadValuesAsync(uri, parameters);
+        }
+        //===========================================================================================================================================================
+        //Downloading Data from MYSQL Events
+        private void MClient_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
         //===========================================================================================================================================================
         //Add new Photo from dialog fragment
