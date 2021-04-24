@@ -8,16 +8,27 @@
 	}
 	//Select entire table
 	$sql = "SELECT * FROM `maintable` ORDER BY `date`";
-	if($conn->query($sql) === FALSE)
+	$result = $conn->query($sql);
+	if($result === FALSE)
 	{
 		echo "Error: " . $sql . "<br>" . $conn->error;	
 	}
 	else
 	{
 		//array to hold our addresses
-		$address = array();	
-		while()
-		
+		$addressArray = array();	
+		while($row = mysqli_fetch_array($result))
+		{
+			$address = array("addressLine" => $row['addressline'],
+							 "city" => $row['city'],
+							 "state" => $row['state'],
+							 "zipCode" => $row['zipcode'],
+							 "desc" => $row['desc'],
+							 "image64" => $row['imageData']);
+			//push to array
+			array_push($addressArray, $address);
+		}
+		echo json_encode($addressArray);	
 	}
 CloseCon($conn);	
 ?>

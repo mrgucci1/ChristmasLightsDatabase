@@ -19,6 +19,7 @@ using System.Net;
 using System.Collections.Specialized;
 using System.Text;
 using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace ChristmasLightsDatabase
 {
@@ -71,23 +72,15 @@ namespace ChristmasLightsDatabase
             headerCity = FindViewById<TextView>(Resource.Id.headerCity);
             headerState = FindViewById<TextView>(Resource.Id.headerState);
             headerZipCode = FindViewById<TextView>(Resource.Id.headerZipCode);
-            //Initialize address list
-            address = new List<addressHolder>();
-            //add address objects
-            address.Add(new addressHolder() { addressLine = "290 Vale Street", city = "Portland", state = "ME", zipCode = "04103", desc = "From the outside this house looks stylish. It has been built with brown stones and has red brick decorations. Short, wide windows add to the overall style of the house and have been added to the house in a mostly asymmetric way." });
-            address.Add(new addressHolder() { addressLine = "2 Canal Road Lake", city = "Zurich", state = "IL", zipCode = "60047", desc = "From the outside this house looks grandiose. It has been built with grey stones and has blue stone decorations. Large, octagon windows allow enough light to enter the home and have been added to the house in a very symmetric way." });
             //Adjust Search bar to be invisable and viewstates to gone
             editSearch.Alpha = 0;
             editSearch.Visibility = ViewStates.Gone;
-            //apply custom adapter to listview so we can display our address's
-            adapter = new myListViewAdapter(this, address);
-            myListView.Adapter = adapter;
             //Activate customer toolbar
             toolBar = FindViewById<Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolBar);
             SupportActionBar.Title = "";
             //Download data from MYSQL Using PHP
-            mProgressBar = FindViewById<ProgressBar>Resource.Id.progressBar);
+            mProgressBar = FindViewById<ProgressBar>(Resource.Id.progressBar);
             mClient = new WebClient();
             mUrl = new Uri("http://192.168.1.22:80/christmaslightsPHP/getAddresses.php");
             mClient.DownloadDataAsync(mUrl);
@@ -264,7 +257,18 @@ namespace ChristmasLightsDatabase
         //Downloading Data from MYSQL Events
         private void MClient_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
         {
-            throw new NotImplementedException();
+            RunOnUiThread(() =>
+            {
+                string resultJson = Encoding.UTF8.GetString(e.Result);
+                address = JsonConvert.DeserializeObject<List<addressHolder>>(resultJson);
+                //add address objects
+                address.Add(new addressHolder() { addressLine = "290 Vale Street", city = "Portland", state = "ME", zipCode = "04103", desc = "From the outside this house looks stylish. It has been built with brown stones and has red brick decorations. Short, wide windows add to the overall style of the house and have been added to the house in a mostly asymmetric way." });
+                address.Add(new addressHolder() { addressLine = "2 Canal Road Lake", city = "Zurich", state = "IL", zipCode = "60047", desc = "From the outside this house looks grandiose. It has been built with grey stones and has blue stone decorations. Large, octagon windows allow enough light to enter the home and have been added to the house in a very symmetric way." });
+                //apply custom adapter to listview so we can display our address's
+                adapter = new myListViewAdapter(this, address);
+                myListView.Adapter = adapter;
+                mProgressBar.Visibility = ViewStates.Gone;
+            });
         }
         //===========================================================================================================================================================
         //Add new Photo from dialog fragment
